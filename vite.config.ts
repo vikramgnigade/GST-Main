@@ -10,12 +10,12 @@ const isVercel = process.env.VERCEL === "1" || process.env.SERVER_PRESET === "ve
 const isNetlify = process.env.NETLIFY === "true" || process.env.NETLIFY === "1" || process.env.SERVER_PRESET === "netlify";
 const isServerless = isVercel || isNetlify;
 
-// Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-// @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
+// For Vercel: build as a static SPA (no SSR) to avoid serverless function timeouts.
+// All reconciliation logic runs client-side, so SSR is not needed.
 export default defineConfig({
   cloudflare: !isServerless,
   tanstackStart: isServerless ? {
-    server: { preset: isVercel ? "vercel" : "netlify" },
+    server: { preset: isVercel ? "vercel-static" : "netlify" },
   } : {
     server: { entry: "server" },
   },

@@ -1,14 +1,23 @@
 {
   "version": 2,
   "cleanUrls": true,
+  "trailingSlash": false,
+  "outputDirectory": "dist/client",
   "rewrites": [
     {
-      "source": "/assets/(.*)",
-      "destination": "/assets/$1"
-    },
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
     {
-      "source": "/((?!assets/|.*\\..*).*)" ,
-      "destination": "/api/server"
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
     }
   ]
 }
